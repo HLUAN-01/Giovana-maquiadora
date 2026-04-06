@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Agendamento</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <h2>Agende seu horário</h2>
+
+  <form id="form">
+    <input type="text" id="nome" placeholder="Seu nome" required><br><br>
+    <input type="date" id="data" required><br><br>
+    <input type="time" id="hora" required><br><br>
+
+    <button type="submit">Agendar</button>
+  </form>
+
+  <script>
+    document.getElementById("form").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      let nome = document.getElementById("nome").value;
+      let data = document.getElementById("data").value;
+      let hora = document.getElementById("hora").value;
+
+      let mensagem = `Olá, meu nome é ${nome}. Quero agendar para ${data} às ${hora}`;
+
+      let url = `https://wa.me/5561993915459?text=${encodeURIComponent(mensagem)}`;
+
+      window.open(url, "_blank");
+    });
+  </script>
+
+</body>
+</html>

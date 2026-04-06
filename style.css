@@ -1,0 +1,48 @@
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #fff0f5;
+  text-align: center;
+}
+
+header {
+  background: #ff69b4;
+  color: white;
+  padding: 15px;
+}
+
+nav a {
+  margin: 10px;
+  color: white;
+  text-decoration: none;
+}
+
+.hero {
+  padding: 50px;
+}
+
+.btn {
+  background: #ff1493;
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+}
+
+#servicos {
+  padding: 30px;
+}
+
+.card {
+  background: white;
+  margin: 15px auto;
+  padding: 20px;
+  width: 250px;
+  border-radius: 10px;
+}
+  
+footer {
+  background: #ff69b4;
+  color: white;
+  padding: 10px;
+  margin-top: 30px;
+}

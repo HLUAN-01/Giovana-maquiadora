@@ -1,0 +1,30 @@
+body {
+  font-family: Arial;
+  background: #fff0f5;
+  text-align: center;
+}
+
+header {
+  background: #d63384;
+  color: white;
+  padding: 20px;
+}
+
+section {
+  margin-top: 40px;
+}
+
+input, select {
+  display: block;
+  margin: 10px auto;
+  padding: 10px;
+  width: 200px;
+}
+
+button {
+  background: #d63384;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}
