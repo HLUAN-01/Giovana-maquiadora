@@ -1,0 +1,20 @@
+[
+  {
+    "usuario": "admin",
+    "senha": "admin123",
+    "perfil": "admin",
+    "nome": "Administrador"
+  },
+  {
+    "usuario": "usuario",
+    "senha": "usuario123",
+    "perfil": "usuario",
+    "nome": "Usuario"
+  },
+  {
+    "nome": "Cliente Teste",
+    "usuario": "cliente950629",
+    "senha": "1234",
+    "perfil": "usuario"
+  }
+]

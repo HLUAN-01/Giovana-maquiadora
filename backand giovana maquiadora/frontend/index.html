@@ -2,27 +2,103 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Giovana Maquiadora</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
   <header>
     <h1>Giovana Maquiadora 💄</h1>
-    <p>Realçando sua beleza</p>
+    <p>Realcando sua beleza com atendimento personalizado</p>
   </header>
 
-  <section>
-    <h2>Agendar Horário</h2>
+  <main>
+    <section class="card" id="login-card">
+      <h2>Login</h2>
+      <p class="subtitle">Entre como admin ou usuario para acessar os agendamentos.</p>
 
-<input type="text" id="nome" placeholder="Seu nome">
-<input type="date" id="data">
-<input type="time" id="hora">
+      <div class="auth-tabs" role="tablist" aria-label="Acesso">
+        <button type="button" class="auth-tab is-active" id="tab-login" data-tab="login" role="tab" aria-selected="true">Login</button>
+        <button type="button" class="auth-tab" id="tab-cadastro" data-tab="cadastro" role="tab" aria-selected="false">Criar conta</button>
+      </div>
 
-<select id="servico">
-  <option>Maquiagem festa</option>
-  <option>Maquiagem noiva</option>
-</select>
+      <section id="painel-login" class="auth-panel">
+        <form id="login-form">
+          <label for="login-usuario">Usuario</label>
+          <input type="text" id="login-usuario" placeholder="admin ou usuario" required>
 
-<button onclick="agendar()">Agendar</button>
-<script src="script.js"></script>
+          <label for="login-senha">Senha</label>
+          <input type="password" id="login-senha" placeholder="Sua senha" required>
+
+          <button type="submit">Entrar</button>
+        </form>
+
+        <p class="credenciais">
+          Admin: <strong>admin / admin123</strong><br>
+          Usuario: <strong>usuario / usuario123</strong>
+        </p>
+
+        <p id="mensagem-login" role="status" aria-live="polite"></p>
+      </section>
+
+      <section id="painel-cadastro" class="auth-panel hidden">
+        <h3>Criar conta de usuario</h3>
+        <form id="cadastro-form">
+          <label for="cadastro-nome">Nome</label>
+          <input type="text" id="cadastro-nome" placeholder="Seu nome" required>
+
+          <label for="cadastro-usuario">Usuario</label>
+          <input type="text" id="cadastro-usuario" placeholder="Ex: maria123" required>
+
+          <label for="cadastro-senha">Senha</label>
+          <input type="password" id="cadastro-senha" placeholder="Minimo 4 caracteres" required>
+
+          <button type="submit">Criar conta</button>
+        </form>
+        <p id="mensagem-cadastro" role="status" aria-live="polite"></p>
+      </section>
+    </section>
+
+    <section class="card hidden" id="app-card">
+      <div class="painel-topo">
+        <div>
+          <h2>Agendar horario</h2>
+          <p class="subtitle" id="usuario-logado"></p>
+        </div>
+        <button type="button" id="btn-logout">Sair</button>
+      </div>
+
+      <p class="subtitle">Escolha o servico e o melhor horario para voce.</p>
+
+      <form id="agendamento-form">
+        <label for="nome">Nome</label>
+        <input type="text" id="nome" placeholder="Seu nome completo" required>
+
+        <label for="data">Data</label>
+        <input type="date" id="data" required>
+
+        <label for="hora">Horario</label>
+        <input type="time" id="hora" required>
+
+        <label for="servico">Servico</label>
+        <select id="servico" required>
+          <option value="Maquiagem festa">Maquiagem festa</option>
+          <option value="Maquiagem noiva">Maquiagem noiva</option>
+          <option value="Maquiagem social">Maquiagem social</option>
+        </select>
+
+        <button type="submit">Agendar</button>
+      </form>
+
+      <p id="mensagem" role="status" aria-live="polite"></p>
+
+      <section class="lista-agendamentos">
+        <h3>Proximos agendamentos</h3>
+        <ul id="lista-agendamentos"></ul>
+      </section>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
