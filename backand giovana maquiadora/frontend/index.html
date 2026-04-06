@@ -24,6 +24,12 @@
 
       <section id="painel-login" class="auth-panel">
         <form id="login-form">
+          <label for="login-perfil">Entrar como</label>
+          <select id="login-perfil" required>
+            <option value="usuario">Usuario</option>
+            <option value="admin">Admin</option>
+          </select>
+
           <label for="login-usuario">Usuario</label>
           <input type="text" id="login-usuario" placeholder="admin ou usuario" required>
 
@@ -59,44 +65,6 @@
       </section>
     </section>
 
-    <section class="card hidden" id="app-card">
-      <div class="painel-topo">
-        <div>
-          <h2>Agendar horario</h2>
-          <p class="subtitle" id="usuario-logado"></p>
-        </div>
-        <button type="button" id="btn-logout">Sair</button>
-      </div>
-
-      <p class="subtitle">Escolha o servico e o melhor horario para voce.</p>
-
-      <form id="agendamento-form">
-        <label for="nome">Nome</label>
-        <input type="text" id="nome" placeholder="Seu nome completo" required>
-
-        <label for="data">Data</label>
-        <input type="date" id="data" required>
-
-        <label for="hora">Horario</label>
-        <input type="time" id="hora" required>
-
-        <label for="servico">Servico</label>
-        <select id="servico" required>
-          <option value="Maquiagem festa">Maquiagem festa</option>
-          <option value="Maquiagem noiva">Maquiagem noiva</option>
-          <option value="Maquiagem social">Maquiagem social</option>
-        </select>
-
-        <button type="submit">Agendar</button>
-      </form>
-
-      <p id="mensagem" role="status" aria-live="polite"></p>
-
-      <section class="lista-agendamentos">
-        <h3>Proximos agendamentos</h3>
-        <ul id="lista-agendamentos"></ul>
-      </section>
-    </section>
   </main>
 
   <script src="script.js"></script>

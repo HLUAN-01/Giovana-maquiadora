@@ -4,18 +4,10 @@ const tabLogin = document.getElementById("tab-login");
 const tabCadastro = document.getElementById("tab-cadastro");
 const painelLogin = document.getElementById("painel-login");
 const painelCadastro = document.getElementById("painel-cadastro");
-const loginCard = document.getElementById("login-card");
-const appCard = document.getElementById("app-card");
 const mensagemLogin = document.getElementById("mensagem-login");
 const mensagemCadastro = document.getElementById("mensagem-cadastro");
-const usuarioLogadoEl = document.getElementById("usuario-logado");
-const botaoLogout = document.getElementById("btn-logout");
-const form = document.getElementById("agendamento-form");
-const mensagem = document.getElementById("mensagem");
-const listaAgendamentos = document.getElementById("lista-agendamentos");
 
 let token = localStorage.getItem("token") || "";
-let usuarioLogado = null;
 
 function alternarAbaAuth(aba) {
   const mostrarLogin = aba === "login";
@@ -25,11 +17,6 @@ function alternarAbaAuth(aba) {
   tabCadastro.classList.toggle("is-active", !mostrarLogin);
   tabLogin.setAttribute("aria-selected", String(mostrarLogin));
   tabCadastro.setAttribute("aria-selected", String(!mostrarLogin));
-}
-
-function mostrarMensagem(texto, tipo) {
-  mensagem.textContent = texto;
-  mensagem.className = tipo;
 }
 
 function mostrarMensagemLogin(texto, tipo) {
@@ -42,153 +29,18 @@ function mostrarMensagemCadastro(texto, tipo) {
   mensagemCadastro.className = tipo;
 }
 
-function cabecalhosAutenticados() {
-  return {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${token}`
-  };
-}
-
-function atualizarTelaLogada() {
-  if (!usuarioLogado) {
+function irParaPainel(perfil) {
+  if (perfil === "admin") {
+    window.location.href = "/admin.html";
     return;
   }
-
-  loginCard.classList.add("hidden");
-  appCard.classList.remove("hidden");
-  usuarioLogadoEl.textContent = `Logado como: ${usuarioLogado.nome} (${usuarioLogado.perfil})`;
-  mostrarMensagem("", "");
-}
-
-function sairLocal() {
-  token = "";
-  usuarioLogado = null;
-  localStorage.removeItem("token");
-  loginCard.classList.remove("hidden");
-  appCard.classList.add("hidden");
-  alternarAbaAuth("login");
-  mostrarMensagem("", "");
-  mostrarMensagemLogin("Faça login para continuar.", "sucesso");
-}
-
-function renderizarAgendamentos(agendamentos) {
-  if (!agendamentos.length) {
-    listaAgendamentos.innerHTML = "<li>Nenhum agendamento ainda.</li>";
-    return;
-  }
-
-  const podeRemover = usuarioLogado && usuarioLogado.perfil === "admin";
-  const itens = agendamentos
-    .slice()
-    .sort((a, b) => new Date(`${a.data}T${a.hora}`) - new Date(`${b.data}T${b.hora}`))
-    .map((item) => {
-      const botaoRemover = podeRemover
-        ? `<button class="btn-remover" data-id="${item.id}" type="button">Remover</button>`
-        : "";
-
-      return `<li>
-        <div><strong>${item.nome}</strong><br>${item.servico}<br>${item.data} as ${item.hora}</div>
-        ${botaoRemover}
-      </li>`;
-    })
-    .join("");
-
-  listaAgendamentos.innerHTML = itens;
-}
-
-async function carregarAgendamentos() {
-  try {
-    const resposta = await fetch("/agendamentos", {
-      headers: cabecalhosAutenticados()
-    });
-
-    if (resposta.status === 401) {
-      sairLocal();
-      return;
-    }
-
-    if (!resposta.ok) {
-      throw new Error("Falha ao listar agendamentos");
-    }
-
-    const agendamentos = await resposta.json();
-    renderizarAgendamentos(agendamentos);
-  } catch (erro) {
-    console.error(erro);
-    listaAgendamentos.innerHTML = "<li>Erro ao carregar agendamentos.</li>";
-  }
-}
-
-async function removerAgendamento(id) {
-  try {
-    const resposta = await fetch(`/agendamentos/${id}`, {
-      method: "DELETE",
-      headers: cabecalhosAutenticados()
-    });
-    const dados = await resposta.json();
-
-    if (!resposta.ok) {
-      throw new Error(dados.mensagem || "Falha ao remover agendamento");
-    }
-
-    mostrarMensagem(dados.mensagem || "Agendamento removido com sucesso!", "sucesso");
-    carregarAgendamentos();
-  } catch (erro) {
-    console.error(erro);
-    mostrarMensagem("Erro ao remover agendamento.", "erro");
-  }
-}
-
-async function agendar(event) {
-  event.preventDefault();
-
-  const nome = document.getElementById("nome").value.trim();
-  const data = document.getElementById("data").value;
-  const hora = document.getElementById("hora").value;
-  const servico = document.getElementById("servico").value;
-
-  if (!nome || !data || !hora || !servico) {
-    mostrarMensagem("Preencha todos os campos para continuar.", "erro");
-    return;
-  }
-
-  const dataSelecionada = new Date(`${data}T${hora}`);
-  const agora = new Date();
-
-  if (Number.isNaN(dataSelecionada.getTime()) || dataSelecionada < agora) {
-    mostrarMensagem("Escolha uma data e horario validos no futuro.", "erro");
-    return;
-  }
-
-  try {
-    const resposta = await fetch("/agendar", {
-      method: "POST",
-      headers: cabecalhosAutenticados(),
-      body: JSON.stringify({
-        nome,
-        data,
-        hora,
-        servico
-      })
-    });
-    const dados = await resposta.json();
-
-    if (!resposta.ok) {
-      throw new Error(dados.mensagem || "Falha ao criar agendamento");
-    }
-
-    mostrarMensagem(dados.mensagem || "Agendamento realizado com sucesso!", "sucesso");
-    form.reset();
-    carregarAgendamentos();
-  } catch (erro) {
-    console.error(erro);
-    mostrarMensagem("Erro ao conectar com o servidor.", "erro");
-  }
+  window.location.href = "/usuario.html";
 }
 
 async function fazerLogin(event) {
   event.preventDefault();
 
+  const perfilSelecionado = document.getElementById("login-perfil").value;
   const usuario = document.getElementById("login-usuario").value.trim();
   const senha = document.getElementById("login-senha").value;
 
@@ -209,21 +61,22 @@ async function fazerLogin(event) {
       throw new Error(dados.mensagem || "Falha no login");
     }
 
+    if (dados.usuario.perfil !== perfilSelecionado) {
+      throw new Error("Tipo de acesso incorreto para esse login.");
+    }
+
     token = dados.token;
-    usuarioLogado = dados.usuario;
     localStorage.setItem("token", token);
     mostrarMensagemLogin("Login realizado com sucesso.", "sucesso");
-    atualizarTelaLogada();
-    carregarAgendamentos();
+    irParaPainel(dados.usuario.perfil);
   } catch (erro) {
     console.error(erro);
-    mostrarMensagemLogin("Usuario ou senha invalidos.", "erro");
+    mostrarMensagemLogin(erro.message || "Usuario ou senha invalidos.", "erro");
   }
 }
 
 async function carregarSessao() {
   if (!token) {
-    sairLocal();
     return;
   }
 
@@ -238,12 +91,12 @@ async function carregarSessao() {
       throw new Error("Sessao invalida");
     }
 
-    usuarioLogado = await resposta.json();
-    atualizarTelaLogada();
-    carregarAgendamentos();
+    const usuarioLogado = await resposta.json();
+    irParaPainel(usuarioLogado.perfil);
   } catch (erro) {
     console.error(erro);
-    sairLocal();
+    localStorage.removeItem("token");
+    token = "";
   }
 }
 
@@ -283,40 +136,8 @@ async function cadastrarUsuario(event) {
   }
 }
 
-async function fazerLogout() {
-  if (!token) {
-    sairLocal();
-    return;
-  }
-
-  try {
-    await fetch("/logout", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-  } catch (erro) {
-    console.error(erro);
-  } finally {
-    sairLocal();
-  }
-}
-
 loginForm.addEventListener("submit", fazerLogin);
 cadastroForm.addEventListener("submit", cadastrarUsuario);
 tabLogin.addEventListener("click", () => alternarAbaAuth("login"));
 tabCadastro.addEventListener("click", () => alternarAbaAuth("cadastro"));
-form.addEventListener("submit", agendar);
-botaoLogout.addEventListener("click", fazerLogout);
-listaAgendamentos.addEventListener("click", (event) => {
-  const botaoRemover = event.target.closest(".btn-remover");
-
-  if (!botaoRemover) {
-    return;
-  }
-
-  removerAgendamento(botaoRemover.dataset.id);
-});
-
 carregarSessao();
